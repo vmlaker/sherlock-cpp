@@ -1,21 +1,36 @@
 // Live playback with OpenCV.
 
+#include <sstream>
+#include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
-using namespace cv;
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
-    VideoCapture cap;
-    cap.open(-1);
-    namedWindow("video", 1);
-    for(;;)
+    // Parse command-line arguments.
+    int DEVICE, WIDTH, HEIGHT, DURATION;
+    std::istringstream(std::string(argv[1])) >> DEVICE;
+    std::istringstream(std::string(argv[2])) >> WIDTH;
+    std::istringstream(std::string(argv[3])) >> HEIGHT;
+    std::istringstream(std::string(argv[4])) >> DURATION;
+    
+    // Create the OpenCV video capture object.
+    cv::VideoCapture cap(DEVICE);
+    cap.set(3, WIDTH);
+    cap.set(4, HEIGHT);
+
+    // Create the display window.
+    const char* title = "playing OpenCV capture";
+    cv::namedWindow(title, CV_WINDOW_NORMAL);
+
+    auto now = boost::posix_time::microsec_clock::universal_time();
+    auto dur = boost::posix_time::seconds(DURATION);
+    auto end = now + dur;
+    while (end > boost::posix_time::microsec_clock::universal_time())
     {
-        Mat frame;
+        // Take a snapshot and display it.
+        cv::Mat frame;
         cap >> frame; 
-        if(!frame.data)
-            break;
-        imshow("video", frame); 
-        if(waitKey(10) >= 0) 
-            break;
+        cv::imshow(title, frame); 
+        cv::waitKey(1);
     }
 }
