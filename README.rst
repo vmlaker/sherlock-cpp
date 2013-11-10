@@ -8,12 +8,18 @@ video processing codes.
 Requirements
 ------------
 
-In order to build the codes, you're gonna need 
-`SCons <http://www.scons.org>`_
-installed on your system:
+In order to build the codes, you're gonna need
+a few things running on your system:
+
+1. `SCons <http://www.scons.org>`_ -- excellent Python-based build system.
+2. `OpenCV <http://www.opencv.org>`_ -- the one-and-only computer vision library.
+3. `Boost C++ libraries <http://www.boost.org>`_ -- if it ain't in the C++ standard, it's in Boost.
+
 ::
    
    yum install scons
+   yum install opencv-devel
+   yum install boost-devel
 
 Download
 --------
@@ -22,6 +28,7 @@ Get the *Sherlock C++* codes:
 ::
 
    git clone --recursive http://github.com/vmlaker/sherlock-cpp
+   cd sherlock-cpp
 
 Usage
 -----
