@@ -1,8 +1,10 @@
 // Live playback with OpenCV.
 
+#include <vector>
 #include <sstream>
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
+#include "RateTicker.hpp"
 
 int main(int argc, char** argv)
 {
@@ -12,7 +14,11 @@ int main(int argc, char** argv)
     std::istringstream(std::string(argv[2])) >> WIDTH;
     std::istringstream(std::string(argv[3])) >> HEIGHT;
     std::istringstream(std::string(argv[4])) >> DURATION;
-    
+
+    // Monitor framerates for the given seconds past.
+    std::vector<float> periods = { 1.0, 5, 10 };
+    RateTicker framerate (periods);
+
     // Create the OpenCV video capture object.
     cv::VideoCapture cap(DEVICE);
     cap.set(3, WIDTH);
@@ -27,9 +33,16 @@ int main(int argc, char** argv)
     auto end = now + dur;
     while (end > boost::posix_time::microsec_clock::universal_time())
     {
-        // Take a snapshot and display it.
+        // Take a snapshot.
         cv::Mat frame;
         cap >> frame; 
+        
+        // Dump framerate to standard output.
+        auto fps = framerate.tick();
+        std::cout << std::fixed << std::setprecision(2);
+        std::cout << fps[0] << ", " << fps[1] << ", " << fps[2] << std::endl;
+
+        // Display the snapshot.
         cv::imshow(title, frame); 
         cv::waitKey(1);
     }
