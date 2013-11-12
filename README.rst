@@ -9,11 +9,11 @@ Requirements
 ------------
 
 In order to build the codes, you're gonna need
-a few things running on your system:
+to have a few things available on your system:
 
-1. `SCons <http://www.scons.org>`_ -- excellent Python-based build system.
-2. `OpenCV <http://www.opencv.org>`_ -- the one-and-only computer vision library.
-3. `Boost C++ libraries <http://www.boost.org>`_ -- if it ain't in the C++ standard, it's in Boost.
+1. `SCons <http://www.scons.org>`_ -- excellent Python-based build system
+2. `OpenCV <http://www.opencv.org>`_ -- the one-and-only computer vision library
+3. `Boost C++ libraries <http://www.boost.org>`_ -- if it ain't in the C++ standard, it's in Boost
 
 ::
    

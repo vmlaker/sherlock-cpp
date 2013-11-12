@@ -5,6 +5,7 @@
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
 #include "RateTicker.hpp"
+#include "util.hpp"
 
 int main(int argc, char** argv)
 {
@@ -37,10 +38,14 @@ int main(int argc, char** argv)
         cv::Mat frame;
         cap >> frame; 
         
-        // Dump framerate to standard output.
+        // Stamp framerate onto image.
         auto fps = framerate.tick();
-        std::cout << std::fixed << std::setprecision(2);
-        std::cout << fps[0] << ", " << fps[1] << ", " << fps[2] << std::endl;
+        std::ostringstream line;
+        line << std::fixed << std::setprecision(2);
+        line << fps[0] << ", " << fps[1] << ", " << fps[2];
+        std::list<std::string> lines;
+        lines.push_back(line.str());
+        sherlock::writeOSD(frame, lines, 0.04);
 
         // Display the snapshot.
         cv::imshow(title, frame); 

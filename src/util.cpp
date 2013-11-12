@@ -1,0 +1,87 @@
+// Utility functions.
+
+#include <string>
+#include <opencv2/opencv.hpp>
+
+namespace sherlock {
+
+// Write text given in *lines* iterable,
+// the height of each line determined by *size* as
+// proportion of image height.
+void writeOSD(
+    cv::Mat& image, 
+    const std::list<std::string>& lines, 
+    const double& size)
+{
+    // Compute row height at scale 1.0 first.
+    int baseline;
+    cv::Size textSize = cv::getTextSize(
+        "I",                       // Text.
+        cv::FONT_HERSHEY_SIMPLEX,  // Font.
+        1.0,                       // Font scale.
+        1,                         // Thickness.
+        &baseline
+        );
+     
+    // Compute actual scale to match desired height.
+    double line_height = image.rows * size;
+    double scale = line_height / textSize.height;
+
+    // Deterimine base thickness, based on scale.
+    int thickness = scale * 4;
+
+    // Increase line height, to account for thickness.
+    line_height += thickness * 3;
+
+    // Iterate the lines of text, and draw them.
+    int xoffset = textSize.width * scale;
+    int yoffset = line_height;
+    for(auto ii=lines.begin(); ii!=lines.end(); ++ii){
+
+        auto line = *ii;
+ 
+        // Draw the drop shadow.
+        cv::putText( 
+            image,
+            line,
+            cv::Point(
+                xoffset + std::max(1, thickness/2), 
+                yoffset + std::max(1, thickness/2)
+                ),
+            cv::FONT_HERSHEY_SIMPLEX,
+            scale,
+            cv::Scalar(0, 0, 0),
+            thickness
+            );
+
+        // Draw the text body.
+        cv::putText( 
+            image,
+            line,
+            cv::Point(xoffset, yoffset),
+            cv::FONT_HERSHEY_SIMPLEX,
+            scale,
+            cv::Scalar(215, 215, 70),
+            thickness
+            );
+
+        // Draw the highlight.
+        cv::putText( 
+            image,
+            line,
+            cv::Point(
+                xoffset - std::max(1, thickness/3), 
+                yoffset - std::max(1, thickness/3)
+                ),
+            cv::FONT_HERSHEY_SIMPLEX,
+            scale,
+            cv::Scalar(245, 255, 200),
+            thickness/3
+            );
+        
+        yoffset += line_height;
+    }
+
+}
+
+} // namespace sherlock.
