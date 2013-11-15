@@ -2,6 +2,9 @@
 
 import os
 
+# Retrieve the debug flag, if set.
+debug = ARGUMENTS.get('debug', False)
+
 # Build the Bites library.
 SConscript('bites/SConstruct')
 
@@ -11,22 +14,26 @@ sources = (
 )
 libs = (
     'opencv_core',
+    
 #    'opencv_contrib',
 )
 env = Environment(
     LIBS=libs,
-    CXXFLAGS='-std=c++11', # -g',
-) 
+    CXXFLAGS='-std=c++11',
+)
+if debug: env.Append(CXXFLAGS = ' -g')
 env.Library('lib/sherlock', source=sources)
 
 # Build the programs.
 sources = (
     'src/playcv2.cpp',
+    'src/diffavg1.cpp',
 )
 libs = (
     'opencv_core',
 #    'opencv_contrib',
     'opencv_highgui',
+    'opencv_imgproc',
     'bites',
     'sherlock',
 )
@@ -34,8 +41,9 @@ env = Environment(
     CPPPATH=('bites/include', 'include'),
     LIBPATH=('bites/lib', 'lib'),
     LIBS=libs,
-    CXXFLAGS='-std=c++11', # -g',
+    CXXFLAGS='-std=c++11',
 ) 
+if debug: env.Append(CXXFLAGS = ' -g')
 for source in sources:
     target = source[:source.rfind('.')]
     target = os.path.basename(target)
