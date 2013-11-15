@@ -3,7 +3,7 @@
 import os
 
 # Retrieve the debug flag, if set.
-debug = ARGUMENTS.get('debug', False)
+debug = bool(int(ARGUMENTS.get('debug', False)))
 
 # Build the Bites library.
 SConscript('bites/SConstruct')

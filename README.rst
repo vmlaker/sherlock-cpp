@@ -36,12 +36,13 @@ Usage
 Build the codes:
 ::
    
-   scons -j8
+   scons -j8 debug=1
 
-Run the simple playback example:
+Run the codes:
 ::
 
    bin/playcv2 -1 640 480 5
+   bin/diffavg1 -1 640 480 5
 
 Clean up after the build:
 ::
