@@ -26,7 +26,7 @@ env.Library('lib/sherlock', source=sources)
 
 # Build the programs.
 sources = (
-    'src/playcv2.cpp',
+    'src/playcv.cpp',
     'src/diffavg1.cpp',
     'src/diffavg2.cpp',
 )

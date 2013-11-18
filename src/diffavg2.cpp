@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     cap.set(4, HEIGHT);
 
     // Create the output window.
-    const char* title = "diff average 1";
+    const char* title = "diff average 2";
     cv::namedWindow(title, CV_WINDOW_NORMAL);
 
     // Monitor framerates for the given seconds past.
