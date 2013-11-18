@@ -28,8 +28,10 @@ env.Library('lib/sherlock', source=sources)
 sources = (
     'src/playcv2.cpp',
     'src/diffavg1.cpp',
+    'src/diffavg2.cpp',
 )
 libs = (
+    'boost_thread',
     'opencv_core',
 #    'opencv_contrib',
     'opencv_highgui',
