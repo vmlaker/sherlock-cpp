@@ -29,6 +29,7 @@ sources = (
     'src/playcv.cpp',
     'src/diffavg1.cpp',
     'src/diffavg2.cpp',
+    'src/diffavg3.cpp',
 )
 libs = (
     'boost_thread',
