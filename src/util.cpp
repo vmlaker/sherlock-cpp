@@ -1,5 +1,6 @@
 // Utility functions.
 
+#include <list>
 #include <string>
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
