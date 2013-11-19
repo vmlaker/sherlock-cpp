@@ -15,11 +15,19 @@ to have a few things available on your system:
 2. `OpenCV <http://www.opencv.org>`_ -- the *one-and-only* computer vision library
 3. `Boost C++ libraries <http://www.boost.org>`_ -- if it ain't in the C++ standard, it's in Boost
 
+With YUM package manager (Red Hat, CentOS, Fedora):
 ::
    
    yum install scons
    yum install opencv-devel
    yum install boost-devel
+
+On systems using Aptitude package manager (Debian, Ubuntu):
+::
+
+   aptitude install scons
+   aptitude install libopencv-dev
+   aptitude install libboost-all-dev
 
 Usage
 -----
