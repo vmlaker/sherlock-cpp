@@ -30,13 +30,16 @@ sources = (
     'src/diffavg1.cpp',
     'src/diffavg2.cpp',
     'src/diffavg3.cpp',
+    'src/detect1.cpp',
 )
 libs = (
+    'boost_filesystem',
     'boost_thread',
     'opencv_core',
 #    'opencv_contrib',
     'opencv_highgui',
     'opencv_imgproc',
+    'opencv_objdetect',
     'bites',
     'sherlock',
 )
