@@ -29,7 +29,8 @@ int main(int argc, char** argv)
 
     std::vector< cv::CascadeClassifier* > classifiers;
     std::vector< cv::Scalar > colors;
-    for(auto ii=sherlock::classify::specs.begin(); ii!=sherlock::classify::specs.end(); ++ii)
+    for(auto ii=sherlock::class_specs.begin(); 
+        ii!=sherlock::class_specs.end(); ++ii)
     {
         boost::filesystem::path file(ii->first);
         boost::filesystem::path dir(ii->second.dir);

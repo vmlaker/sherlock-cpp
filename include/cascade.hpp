@@ -11,8 +11,6 @@
 
 namespace sherlock {
 
-namespace classify {
-
 const std::string path_to_haar = "/usr/share/OpenCV/haarcascades";
 const std::string path_to_lbp = "/usr/share/OpenCV/lbpcascades";
 
@@ -21,7 +19,7 @@ struct DirColor {
     std::vector<int> color;
 };
 
-const std::map <const std::string, const DirColor> specs = {
+const std::map <const std::string, const DirColor> class_specs = {
 
     // ===== Face =====
     {"haarcascade_frontalface_alt2.xml"    , { path_to_haar, {0, 255, 0}}},
@@ -53,8 +51,6 @@ const std::map <const std::string, const DirColor> specs = {
     //{"haarcascade_mcs_upperbody.xml"      , path_to_haar, {0, 255, 0}},
     //{"haarcascade_upperbody.xml"          , path_to_haar, {0, 255, 0}},
 };
-
-} // namespace classify.
 
 } // namespace sherlock.
 
