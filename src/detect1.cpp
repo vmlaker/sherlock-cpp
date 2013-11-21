@@ -6,8 +6,9 @@
 #include <boost/filesystem.hpp>
 #include <opencv2/opencv.hpp>
 #include "RateTicker.hpp"
+#include "Config.hpp"
 #include "util.hpp"
-#include "cascade.hpp"
+
 
 int main(int argc, char** argv)
 {
@@ -27,23 +28,27 @@ int main(int argc, char** argv)
     const char* title = "detect 1";
     cv::namedWindow(title, CV_WINDOW_NORMAL);
 
+    // Initialize the classifiers and their respective colors.
+    Config config ("conf/classifiers.conf");
     std::vector< cv::CascadeClassifier* > classifiers;
     std::vector< cv::Scalar > colors;
-    for(auto ii=sherlock::class_specs.begin(); 
-        ii!=sherlock::class_specs.end(); ++ii)
+    for(auto fname : config.keys())
     {
-        boost::filesystem::path file(ii->first);
-        boost::filesystem::path dir(ii->second.dir);
-        boost::filesystem::path full = dir / file;
-        auto cfer = new cv::CascadeClassifier(full.string());
-        classifiers.push_back(cfer);
-        auto color = cv::Scalar(
-            ii->second.color[0],
-            ii->second.color[1],
-            ii->second.color[2]
-            );
-        colors.push_back(color);
-    } 
+        boost::filesystem::path file(fname + ".xml");
+        for(auto dname : { "/usr/share/OpenCV/haarcascades", 
+                    "/usr/share/OpenCV/lbpcascades" }
+            )
+        {
+            boost::filesystem::path dir(dname);
+            boost::filesystem::path full = dir / file;
+            auto cfer = new cv::CascadeClassifier(full.string());
+            if( cfer->empty() ) continue;
+            classifiers.push_back(cfer);
+            int rr, gg, bb;
+            std::stringstream(config[fname]) >> rr >> gg >> bb;
+            colors.push_back(cv::Scalar(rr, gg, bb));
+        }
+    }
 
     // Keep track of previous iteration's timestamp.
     boost::posix_time::ptime tstamp_prev;
@@ -62,40 +67,36 @@ int main(int argc, char** argv)
         cv::Mat frame;
         cap >> frame; 
 
+        // Collect a list of positive detection rectangles.
         struct RectColor{
             cv::Rect rect;
             cv::Scalar color;
         };
-
         std::vector<RectColor> results;
         for(auto ii=0; ii!= classifiers.size(); ++ii){
-            auto classi = classifiers[ii];
             std::vector<cv::Rect> rects;
-            classi->detectMultiScale(
+            classifiers[ii]->detectMultiScale(
                 frame,
                 rects,
                 1.3,  // scale factor.
                 3,    // min neighbors.
                 0,    // flags.
-                cv::Size(frame.size().width/20, frame.size().height/20),     // min size.
-                cv::Size(frame.size().width/2, frame.size().height/2)     // max size.
+                {frame.size().width/20, frame.size().height/20},  // min size.
+                {frame.size().width/2, frame.size().height/2}     // max size.
                 );
             for(auto jj=rects.begin(); jj!= rects.end(); ++jj){
-                auto rect = *jj;
-                auto color = colors[ii];
-                RectColor rrcc = { rect, color };
-                results.push_back(rrcc);
+                results.push_back({ *jj, colors[ii] });
             }
         }
+
+        // Draw the rectangles.
         for(auto ii=results.begin(); ii!=results.end(); ++ii){
-            auto rrcc = *ii;
-            auto rect = rrcc.rect;
-            auto color = rrcc.color;
+            auto rect = ii->rect;
+            auto color = ii->color;
             cv::rectangle(
                 frame,
                 cv::Point(rect.x, rect.y),
-                cv::Point(rect.x + rect.width, 
-                          rect.y + rect.height),
+                cv::Point(rect.x + rect.width, rect.y + rect.height),
                 color,
                 2  // thickness.                
                 );
