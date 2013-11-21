@@ -50,12 +50,8 @@ int main(int argc, char** argv)
         }
     }
 
-    // Keep track of previous iteration's timestamp.
-    boost::posix_time::ptime tstamp_prev;
-
     // Monitor framerates for the given seconds past.
-    std::vector<float> periods = { 1, 5, 10 };
-    RateTicker framerate (periods);
+    RateTicker framerate ({ 1, 5, 10 });
 
     // Run the loop for designated amount of time.
     auto now = boost::posix_time::microsec_clock::universal_time();
@@ -102,8 +98,18 @@ int main(int argc, char** argv)
                 );
         }
 
+        // Write the display framerate on top of the image.
+        auto fps = framerate.tick();
+        std::ostringstream line;
+        line << std::fixed << std::setprecision(2);
+        line << fps[0] << ", " << fps[1] << ", " << fps[2];
+        std::list<std::string> lines;
+        lines.push_back(line.str());
+        sherlock::writeOSD(frame, lines, 0.04);
+
         // Display the snapshot.
         cv::imshow(title, frame); 
         cv::waitKey(1);
     }
+
 }
