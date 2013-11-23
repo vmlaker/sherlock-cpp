@@ -36,6 +36,7 @@ sources = (
 libs = (
     'boost_filesystem',
     'boost_thread',
+    'boost_system',
     'opencv_core',
 #    'opencv_contrib',
     'opencv_highgui',
