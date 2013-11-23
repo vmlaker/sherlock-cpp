@@ -1,4 +1,4 @@
-// Difference from running average.
+// Object detection.
 
 // Include standard headers.
 #include <vector>
@@ -17,6 +17,8 @@
 #include "util.hpp"
 
 
+// Capture frames for given *duration* number of seconds,
+// and push frames onto queues.
 void capture(
     cv::VideoCapture* cap,
     const int& duration, 
@@ -42,8 +44,7 @@ void capture(
         std::ostringstream line;
         line << std::fixed << std::setprecision(2);
         line << fps[0] << ", " << fps[1] << ", " << fps[2] << " (capture)";
-        std::list<std::string> lines;
-        lines.push_back(line.str());
+        std::list<std::string> lines ({ line.str() });
         sherlock::writeOSD(*frame, lines, 0.04);
 
         // Push image onto all queues.
@@ -69,10 +70,12 @@ struct RectColor{
     cv::Scalar color;
 };
 
+
+// Do detection.
 void detect(
     ConcurrentQueue <cv::Mat*>* detect_queue,
     cv::CascadeClassifier* classifier,
-    cv::Scalar color,
+    const cv::Scalar& color,
     ConcurrentQueue <RectColor>* rect_colors,
     ConcurrentQueue <cv::Mat*>* done_queue
     )
@@ -120,6 +123,7 @@ void detect(
 }
 
 
+// Draw rectangles on queued frames, and display.
 void display(
     ConcurrentQueue <cv::Mat*>* display_queue,
     ConcurrentQueue <RectColor>* rect_colors,
@@ -158,9 +162,7 @@ void display(
         std::ostringstream line;
         line << std::fixed << std::setprecision(2);
         line << fps[0] << ", " << fps[1] << ", " << fps[2] << " (display)";
-        std::list<std::string> lines;
-        lines.push_back("");
-        lines.push_back(line.str());
+        std::list<std::string> lines ({ "", line.str() });
         sherlock::writeOSD(*frame, lines, 0.04);
 
         // Display the snapshot.
@@ -188,6 +190,8 @@ void display(
 }
 
 
+// Deallocate frames in given queue.
+// Deallocate a frame when its count reaches trigger threshold.
 void deallocate(
     ConcurrentQueue <cv::Mat*>* done_queue,
     const int& deallocate_trigger_count
