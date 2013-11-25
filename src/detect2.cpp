@@ -241,24 +241,28 @@ int main(int argc, char** argv)
     std::istringstream(std::string(argv[4])) >> DURATION;
 
     // Initialize the classifiers and their respective colors.
+    std::vector <cv::CascadeClassifier*> classifiers;
+    std::vector <cv::Scalar> colors;
     Config config ("conf/classifiers.conf");
-    std::vector< cv::CascadeClassifier* > classifiers;
-    std::vector< cv::Scalar > colors;
     for(auto fname : config.keys())
     {
+        if(fname == "DIRS"){
+            continue;
+        }
         boost::filesystem::path file(fname + ".xml");
-        for(auto dname : { "/usr/share/OpenCV/haarcascades", 
-                    "/usr/share/OpenCV/lbpcascades" }
-            )
-        {
-            boost::filesystem::path dir(dname);
+        std::string dir_name;
+        std::stringstream dirs(config["DIRS"]);
+        while(dirs >> dir_name){
+            boost::filesystem::path dir (dir_name);
             boost::filesystem::path full = dir / file;
             auto cfer = new cv::CascadeClassifier(full.string());
-            if( cfer->empty() ) continue;
+            if(cfer->empty()){
+                continue;
+            }
             classifiers.push_back(cfer);
-            double rr, gg, bb;
+            int rr, gg, bb;
             std::stringstream(config[fname]) >> rr >> gg >> bb;
-            colors.push_back({ rr, gg, bb });
+            colors.push_back(cv::Scalar(rr, gg, bb));
         }
     }
 

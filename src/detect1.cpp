@@ -1,6 +1,7 @@
 // Difference from running average.
 
 #include <vector>
+#include <string>
 #include <sstream>
 #include <boost/date_time.hpp>
 #include <boost/filesystem.hpp>
@@ -29,20 +30,25 @@ int main(int argc, char** argv)
     cv::namedWindow(title, CV_WINDOW_NORMAL);
 
     // Initialize the classifiers and their respective colors.
+    std::vector <cv::CascadeClassifier*> classifiers;
+    std::vector <cv::Scalar> colors;
     Config config ("conf/classifiers.conf");
-    std::vector< cv::CascadeClassifier* > classifiers;
-    std::vector< cv::Scalar > colors;
     for(auto fname : config.keys())
     {
+        if(fname == "DIRS"){
+            continue;
+        }
         boost::filesystem::path file(fname + ".xml");
-        for(auto dname : { "/usr/share/OpenCV/haarcascades", 
-                    "/usr/share/OpenCV/lbpcascades" }
-            )
-        {
-            boost::filesystem::path dir(dname);
+        std::string dir_name;
+        std::stringstream dirs(config["DIRS"]);
+        while(dirs >> dir_name){
+            boost::filesystem::path dir (dir_name);
             boost::filesystem::path full = dir / file;
+            std::cout << full << std::endl;
             auto cfer = new cv::CascadeClassifier(full.string());
-            if( cfer->empty() ) continue;
+            if(cfer->empty()){
+                continue;
+            }
             classifiers.push_back(cfer);
             int rr, gg, bb;
             std::stringstream(config[fname]) >> rr >> gg >> bb;
