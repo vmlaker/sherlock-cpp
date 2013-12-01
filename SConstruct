@@ -11,6 +11,7 @@ SConscript('bites/SConstruct')
 # Compile utils.
 sources = (
     'src/util.cpp',
+    'src/Captor.cpp',
     'src/Detector.cpp',
 )
 libs = (

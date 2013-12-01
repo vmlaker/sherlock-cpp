@@ -2,6 +2,11 @@
   The Detector class encapsulates object detector functionality.
  */
 
+// Include 3rd party headers.
+#include <boost/filesystem.hpp>
+#include "RateTicker.hpp"
+#include "Config.hpp"
+
 // Include application headers.
 #include "Detector.hpp"
 #include "util.hpp"
@@ -12,11 +17,9 @@ Detector::Detector(
     const int& device,
     const int& width,
     const int& height,
-    const int& duration) :
-    m_device(device),
-    m_width(width),
-    m_height(height),
-    m_duration(duration)
+    const int& duration
+    ) :
+    m_captor(device, width, height, duration, m_detect_queues, m_display_queue)
 {
     Config config ("conf/classifiers.conf");
     for(auto fname : config.keys())
@@ -41,57 +44,6 @@ Detector::Detector(
         }
     }
     std::cout << "constructor end" << std::endl;
-}
-
-
-// Capture frames for given *duration* number of seconds,
-// and push frames onto queues.
-void Detector::capture()
-{
-    std::cout << "capture start" << std::endl;
-
-    // Create the OpenCV video capture object.
-    cv::VideoCapture cap(m_device);
-    cap.set(3, m_width);
-    cap.set(4, m_height);
-
-    // Monitor framerates for the given seconds past.
-    RateTicker framerate ({ 1, 5, 10 });
-
-    // Run the loop for designated amount of time.
-    auto now = boost::posix_time::microsec_clock::universal_time();
-    auto dur = boost::posix_time::seconds(m_duration);
-    auto end = now + dur;
-    while (end > boost::posix_time::microsec_clock::universal_time())
-    {
-        // Take a snapshot.
-        auto frame = new cv::Mat;
-        cap >> *frame; 
-
-        // Stamp the capture framerate on top of the image.
-        auto fps = framerate.tick();
-        std::ostringstream line1, line2;
-        line1 << m_width << "x" << m_height;
-        line2 << std::fixed << std::setprecision(2);
-        line2 << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS capture)";
-        std::list<std::string> lines ({ line1.str(), line2.str() });
-        sherlock::writeOSD(*frame, lines, 0.04);
-
-        // Push image onto all queues.
-        for(auto proc_queue : m_detect_queues)
-        {
-            proc_queue->push(frame);
-        }
-        m_display_queue.push(frame);
-    }
-
-    // Signal end-of-processing by pushing NULL onto all queues.
-    for(auto proc_queue : m_detect_queues)
-    {
-        proc_queue->push(NULL);
-    }
-    m_display_queue.push(NULL);
-
 }
 
 
@@ -267,7 +219,7 @@ void Detector::run()
     }
 
     // Start up capture and display threads.
-    m_capturer = new std::thread(&Detector::capture, this);
+    m_captor.start();
     m_displayer = new std::thread(&Detector::display, this);
 
     // Start up the deallocator thread.
@@ -280,9 +232,6 @@ void Detector::run()
 Detector::~Detector()
 {
     // Join all threads.
-    m_capturer->join();
-    delete m_capturer;
-
     m_displayer->join();
     delete m_displayer;
     for(auto thread : m_detectors)

@@ -3,16 +3,14 @@
 
 // Include standard headers.
 #include <vector>
-#include <sstream>
 #include <thread>
 
 // Include 3rd party headers.
-#include <boost/date_time.hpp>
-#include <boost/filesystem.hpp>
 #include <opencv2/opencv.hpp>
 #include "ConcurrentQueue.hpp"
-#include "RateTicker.hpp"
-#include "Config.hpp"
+
+// Include application headers.
+#include "Captor.hpp"
 
 namespace sherlock {
 
@@ -37,15 +35,14 @@ private:
     void display();
     void deallocate(const int& deallocate_trigger_count);
 
-    int m_device;
-    int m_width;
-    int m_height;
-    int m_duration;
+    // Video capture object.
+    sherlock::Captor m_captor;
 
     // Classifiers and their respective colors.
     std::vector <cv::CascadeClassifier*> m_classifiers;
 
     std::vector <cv::Scalar> m_colors;
+
 
     // Collect a list of positive detection rectangles.
     struct RectColor{
@@ -61,7 +58,6 @@ private:
 
     // Detector threads.
     std::list <std::thread*> m_detectors;
-    std::thread* m_capturer;
     std::thread* m_displayer;
     std::thread* m_deallocator;
 };
