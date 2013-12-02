@@ -8,38 +8,6 @@
 
 namespace sherlock {
 
-Captor::Captor(
-    const int& device, 
-    const int& width,
-    const int& height,
-    const int& duration,
-    std::vector< ConcurrentQueue <cv::Mat*>* >& detect_queues,
-    ConcurrentQueue <cv::Mat*>& display_queue
-    ) :
-    m_device        (device),
-    m_width         (width),
-    m_height        (height),
-    m_duration      (duration),
-    m_detect_queues (detect_queues),
-    m_display_queue (display_queue)
-{ 
-    /* Body empty. */ 
-}
-
-Captor::~Captor()
-{
-    if (m_thread) 
-    {
-        m_thread->join();
-        delete m_thread;
-    }
-}
-
-void Captor::start ()
-{
-    m_thread = new std::thread(&Captor::run, this);
-}
-
 void Captor::run ()
 {
     // Create the OpenCV video capture object.

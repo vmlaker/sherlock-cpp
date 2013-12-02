@@ -1,32 +1,8 @@
-// Include 3rd party headers.
-#include <boost/date_time.hpp>
-#include "RateTicker.hpp"
-
 // Include application headers.
 #include "Deallocator.hpp"
 #include "util.hpp"
 
 namespace sherlock {
-
-Deallocator::Deallocator( ConcurrentQueue <cv::Mat*>& done_queue )
-    : m_done_queue (done_queue)
-{ 
-    /* Body empty. */ 
-}
-
-Deallocator::~Deallocator()
-{
-    if (m_thread) 
-    {
-        m_thread->join();
-        delete m_thread;
-    }
-}
-
-void Deallocator::start ()
-{
-    m_thread = new std::thread(&Deallocator::run, this);
-}
 
 // Deallocate frames in given queue.
 // Deallocate a frame when its count reaches trigger threshold.

@@ -9,9 +9,12 @@
 #include <opencv2/opencv.hpp>
 #include "ConcurrentQueue.hpp"
 
+// Include application headers.
+#include "Worker.hpp"
+
 namespace sherlock {
 
-class Captor {
+class Captor : public Worker {
 
 public:
     Captor(
@@ -20,9 +23,15 @@ public:
         const int& height,
         const int& duration,
         std::vector< ConcurrentQueue <cv::Mat*>* >& detect_queues,
-        ConcurrentQueue <cv::Mat*>& display_queue);
-    ~Captor();
-    void start();
+        ConcurrentQueue <cv::Mat*>& display_queue
+        ):
+        m_device        (device),
+        m_width         (width),
+        m_height        (height),
+        m_duration      (duration),
+        m_detect_queues (detect_queues),
+        m_display_queue (display_queue)
+        { /* Empty. */ }
 
 private:
     int m_device;
@@ -31,8 +40,6 @@ private:
     int m_duration;
     std::vector< ConcurrentQueue <cv::Mat*>* >& m_detect_queues;
     ConcurrentQueue <cv::Mat*>& m_display_queue;
-    std::thread* m_thread = NULL;
-
     void run();
 };
 

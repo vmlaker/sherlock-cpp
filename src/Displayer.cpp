@@ -1,5 +1,4 @@
 // Include 3rd party headers.
-#include <boost/date_time.hpp>
 #include "RateTicker.hpp"
 
 // Include application headers.
@@ -7,32 +6,6 @@
 #include "util.hpp"
 
 namespace sherlock {
-
-Displayer::Displayer(
-    ConcurrentQueue <cv::Mat*>& display_queue,
-    ConcurrentQueue <cv::Mat*>& done_queue,
-    ConcurrentQueue <RectColor>& rect_colors
-    ) :
-    m_display_queue (display_queue),
-    m_done_queue (done_queue),
-    m_rect_colors (rect_colors)
-{ 
-    /* Body empty. */ 
-}
-
-Displayer::~Displayer()
-{
-    if (m_thread) 
-    {
-        m_thread->join();
-        delete m_thread;
-    }
-}
-
-void Displayer::start ()
-{
-    m_thread = new std::thread(&Displayer::run, this);
-}
 
 // Draw rectangles on queued frames, and display.
 void Displayer::run ()
