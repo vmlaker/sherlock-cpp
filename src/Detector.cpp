@@ -4,7 +4,6 @@
 
 // Include 3rd party headers.
 #include <boost/filesystem.hpp>
-#include "RateTicker.hpp"
 #include "Config.hpp"
 
 // Include application headers.
@@ -19,7 +18,9 @@ Detector::Detector(
     const int& height,
     const int& duration
     ) :
-    m_captor(device, width, height, duration, m_detect_queues, m_display_queue)
+    m_captor(device, width, height, duration, m_detect_queues, m_display_queue),
+    m_displayer(m_display_queue, m_done_queue, m_rect_colors),
+    m_deallocator(m_done_queue)
 {
     Config config ("conf/classifiers.conf");
     for(auto fname : config.keys())
@@ -43,7 +44,6 @@ Detector::Detector(
             m_colors.push_back(cv::Scalar(rr, gg, bb));
         }
     }
-    std::cout << "constructor end" << std::endl;
 }
 
 
@@ -97,109 +97,6 @@ void Detector::detect(
 }
 
 
-// Draw rectangles on queued frames, and display.
-void Detector::display()
-{
-    // Create the output window.
-    const char* title = "detect 2";
-    cv::namedWindow(title, CV_WINDOW_NORMAL);
-
-    // Monitor framerates for the given seconds past.
-    RateTicker framerate ({ 1, 5, 10 });
-
-    // Pull from the queue while there are valid matrices.
-    cv::Mat* frame;
-    m_display_queue.wait_and_pop(frame);
-    while(frame)
-    {
-        // Draw the rectangles.
-        RectColor rect_color;
-        while(m_rect_colors.try_pop(rect_color))
-        {
-            auto rect = rect_color.rect;
-            auto color = rect_color.color;
-            cv::rectangle(
-                *frame,
-                cv::Point(rect.x, rect.y),
-                cv::Point(rect.x + rect.width, rect.y + rect.height),
-                color,
-                2  // thickness.                
-                );
-        }
-
-        // Write the display framerate on top of the image.
-        auto fps = framerate.tick();
-        std::ostringstream line;
-        line << std::fixed << std::setprecision(2);
-        line << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS display)";
-        std::list<std::string> lines ({ "", "", line.str() });
-        sherlock::writeOSD(*frame, lines, 0.04);
-
-        // Display the snapshot.
-        cv::imshow(title, *frame); 
-        cv::waitKey(1);
-        
-        // Filter out excess images in the queue.
-        // If display hardware is not fast enough, showing these 
-        // images introduces (incremental) lag, hence the "lossy filter."
-        // Add all dropped and processed frames to "done" queue.
-        int count = 0;
-        auto prev_frame = frame;
-        while(m_display_queue.try_pop(frame))
-        {
-            m_done_queue.push(prev_frame);
-            prev_frame = frame;
-            ++count;
-        }
-        if(count == 0)
-        {
-            m_done_queue.push(prev_frame);
-            m_display_queue.wait_and_pop(frame);
-        }
-    }
-}
-
-
-// Deallocate frames in given queue.
-// Deallocate a frame when its count reaches trigger threshold.
-void Detector::deallocate(
-    const int& deallocate_trigger_count
-    )
-{
-    // Count the number of times each frame is encountered
-    // in the "done" queue (to know when the count triggers
-    // deallocation.)
-    std::map <cv::Mat*, int> done_counts;
-    
-    // Pull from the queue while there are valid matrices.
-    cv::Mat* frame;
-    m_done_queue.wait_and_pop(frame);
-    while(frame)
-    {
-        // If this is the first time frame is encountered,
-        // initialize it's count to 1 (one.)
-        if(done_counts.find(frame) == done_counts.end())
-        {
-            done_counts.insert({ frame, 1 });
-        }
-        // Otherwise, increment the frame's existing count,
-        // and perform deallocation, if triggered.
-        else
-        {
-            done_counts[frame]++;
-            if(done_counts[frame] == deallocate_trigger_count)
-            {
-                delete frame;
-                done_counts.erase(frame);
-            }
-        }
-        
-        // Retrieve the next frame.
-        m_done_queue.wait_and_pop(frame);
-    }
-}
-
-
 void Detector::run()
 {
     // Start up the detector threads.
@@ -220,20 +117,17 @@ void Detector::run()
 
     // Start up capture and display threads.
     m_captor.start();
-    m_displayer = new std::thread(&Detector::display, this);
+    m_displayer.start();
 
     // Start up the deallocator thread.
-    auto deallocate_trigger_count = m_detectors.size() + 1;
-    m_deallocator = new std::thread(
-        &Detector::deallocate, this, deallocate_trigger_count);
+    m_deallocator.setTrigger( m_detectors.size() + 1 );
+    m_deallocator.start();
 }
 
 
 Detector::~Detector()
 {
     // Join all threads.
-    m_displayer->join();
-    delete m_displayer;
     for(auto thread : m_detectors)
     {
         thread->join();
@@ -242,8 +136,6 @@ Detector::~Detector()
 
     // Signal deallocator thread to stop, and join it.
     m_done_queue.push(NULL);
-    m_deallocator->join();
-    delete m_deallocator;
 }
 
 }  // namespace sherlock.

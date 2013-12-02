@@ -10,7 +10,10 @@
 #include "ConcurrentQueue.hpp"
 
 // Include application headers.
+#include "Sherlock.hpp"
 #include "Captor.hpp"
+#include "Displayer.hpp"
+#include "Deallocator.hpp"
 
 namespace sherlock {
 
@@ -26,29 +29,24 @@ public:
     void run();
 
 private:
-    void capture();
     void detect(
         ConcurrentQueue<cv::Mat*>* detect_queue,
         cv::CascadeClassifier* classifier,
         const cv::Scalar& color
         );
-    void display();
-    void deallocate(const int& deallocate_trigger_count);
 
     // Video capture object.
     sherlock::Captor m_captor;
 
+    // Video display object.
+    sherlock::Displayer m_displayer;
+
+    // Memory deallocte object.
+    sherlock::Deallocator m_deallocator;
+
     // Classifiers and their respective colors.
     std::vector <cv::CascadeClassifier*> m_classifiers;
-
     std::vector <cv::Scalar> m_colors;
-
-
-    // Collect a list of positive detection rectangles.
-    struct RectColor{
-        cv::Rect rect;
-        cv::Scalar color;
-    };
 
     // Shared queues.
     std::vector< ConcurrentQueue <cv::Mat*>* > m_detect_queues;
@@ -58,8 +56,6 @@ private:
 
     // Detector threads.
     std::list <std::thread*> m_detectors;
-    std::thread* m_displayer;
-    std::thread* m_deallocator;
 };
 
 }  // namespace sherlock.

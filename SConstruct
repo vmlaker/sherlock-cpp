@@ -12,6 +12,8 @@ SConscript('bites/SConstruct')
 sources = (
     'src/util.cpp',
     'src/Captor.cpp',
+    'src/Displayer.cpp',
+    'src/Deallocator.cpp',
     'src/Detector.cpp',
 )
 libs = (
