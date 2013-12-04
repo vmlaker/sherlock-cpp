@@ -22,14 +22,14 @@ public:
         const int& width,
         const int& height,
         const int& duration,
-        std::vector< ConcurrentQueue <cv::Mat*>* >& detect_queues,
+        std::vector< ConcurrentQueue <cv::Mat*>* >& classifier_queues,
         ConcurrentQueue <cv::Mat*>& display_queue
         ):
         m_device        (device),
         m_width         (width),
         m_height        (height),
         m_duration      (duration),
-        m_detect_queues (detect_queues),
+        m_classifier_queues (classifier_queues),
         m_display_queue (display_queue)
         { /* Empty. */ }
 
@@ -38,7 +38,7 @@ private:
     int m_width;
     int m_height;
     int m_duration;
-    std::vector< ConcurrentQueue <cv::Mat*>* >& m_detect_queues;
+    std::vector< ConcurrentQueue <cv::Mat*>* >& m_classifier_queues;
     ConcurrentQueue <cv::Mat*>& m_display_queue;
     void run();
 };

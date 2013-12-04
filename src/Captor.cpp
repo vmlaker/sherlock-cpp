@@ -38,17 +38,17 @@ void Captor::run ()
         sherlock::writeOSD(*frame, lines, 0.04);
 
         // Push image onto all queues.
-        for(auto proc_queue : m_detect_queues)
+        for(auto cqueue : m_classifier_queues)
         {
-            proc_queue->push(frame);
+            cqueue->push(frame);
         }
         m_display_queue.push(frame);
     }
 
     // Signal end-of-processing by pushing NULL onto all queues.
-    for(auto proc_queue : m_detect_queues)
+    for(auto cqueue : m_classifier_queues)
     {
-        proc_queue->push(NULL);
+        cqueue->push(NULL);
     }
     m_display_queue.push(NULL);
 }

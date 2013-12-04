@@ -14,6 +14,7 @@ sources = (
     'src/Captor.cpp',
     'src/Displayer.cpp',
     'src/Deallocator.cpp',
+    'src/Classifier.cpp',
     'src/Detector.cpp',
 )
 libs = (

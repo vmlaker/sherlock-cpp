@@ -40,8 +40,8 @@ namespace sherlock {
 
   int main(int argc, char** argv) {
      bar Foo;
-     foo.start();
-     // Join happens in destructor.
+     bar.start();
+     bar.join();
   }
 
   \endcode
@@ -51,23 +51,33 @@ class Worker {
 
 public:
     /*!
-      Join internal thread object and deallocate memory.
+      Deallocate memory for internal thread object.
      */
     ~Worker()
     {
         if (m_thread) 
         {
-            m_thread->join();
             delete m_thread;
         }
     }
 
     /*!
-      Allocate internal thread object and start the thread.
+      Allocate (and start) internal thread object.
     */
     void start ()
     {
         m_thread = new std::thread(&Worker::run, this);
+    }
+
+    /*!
+      Join internal thread.
+    */
+    void join ()
+    {
+        if (m_thread)
+        {
+            m_thread->join();
+        }
     }
 
 private:
