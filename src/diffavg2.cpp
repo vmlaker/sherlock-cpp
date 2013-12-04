@@ -1,19 +1,23 @@
 // Difference from running average, with multiprocessing.
 
+// Import standard headers.
 #include <vector>
 #include <sstream>
 #include <thread>
+
+// Import 3rd party headers.
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
-#include "RateTicker.hpp"
-#include "ConcurrentQueue.hpp"
+#include <bites.hpp>
+
+// Import application headers.
 #include "util.hpp"
 
 void step1(
     cv::VideoCapture* cap,
     const int& duration, 
-    ConcurrentQueue< cv::Mat* >* frames,
-    ConcurrentQueue< float >* alphas
+    bites::ConcurrentQueue< cv::Mat* >* frames,
+    bites::ConcurrentQueue< float >* alphas
     )
 {
     // Keep track of previous iteration's timestamp.
@@ -43,9 +47,9 @@ void step1(
 
 
 void step2(
-    ConcurrentQueue< cv::Mat* >* frames,
-    ConcurrentQueue< cv::Mat* >* diffs,
-    ConcurrentQueue< float >* alphas
+    bites::ConcurrentQueue< cv::Mat* >* frames,
+    bites::ConcurrentQueue< cv::Mat* >* diffs,
+    bites::ConcurrentQueue< float >* alphas
     )
 {
     // Maintain accumulation of differences.
@@ -121,12 +125,12 @@ int main(int argc, char** argv)
 
     // Monitor framerates for the given seconds past.
     std::vector<float> periods = { 1, 5, 10 };
-    RateTicker framerate (periods);
+    bites::RateTicker framerate (periods);
 
     // Create the shared queues.
-    ConcurrentQueue <cv::Mat*> frames;
-    ConcurrentQueue <float> alphas;
-    ConcurrentQueue <cv::Mat*> diffs;
+    bites::ConcurrentQueue <cv::Mat*> frames;
+    bites::ConcurrentQueue <float> alphas;
+    bites::ConcurrentQueue <cv::Mat*> diffs;
 
     // Start up the threads.
     std::thread thread1 (step1, &cap, DURATION, &frames, &alphas);

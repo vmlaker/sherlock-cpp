@@ -1,10 +1,15 @@
 // Difference from running average.
 
+// Import standard headers.
 #include <vector>
 #include <sstream>
+
+// Import 3rd party headers.
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
-#include "RateTicker.hpp"
+#include <bites.hpp>
+
+// Import application headers.
 #include "util.hpp"
 
 int main(int argc, char** argv)
@@ -33,7 +38,7 @@ int main(int argc, char** argv)
 
     // Monitor framerates for the given seconds past.
     std::vector<float> periods = { 1, 5, 10 };
-    RateTicker framerate (periods);
+    bites::RateTicker framerate (periods);
 
     // Run the loop for designated amount of time.
     auto now = boost::posix_time::microsec_clock::universal_time();

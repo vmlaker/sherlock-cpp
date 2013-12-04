@@ -7,7 +7,7 @@
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
-#include "ConcurrentQueue.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Captor.hpp"
@@ -43,10 +43,10 @@ private:
     std::list <sherlock::Classifier*> m_classifiers;
 
     // Shared queues.
-    std::vector< ConcurrentQueue <cv::Mat*>* > m_classifier_inputs;
-    ConcurrentQueue <cv::Mat*> m_display_queue;
-    ConcurrentQueue <cv::Mat*> m_done_queue;
-    ConcurrentQueue <RectColor> m_rect_colors;
+    std::vector< bites::ConcurrentQueue <cv::Mat*>* > m_classifier_inputs;
+    bites::ConcurrentQueue <cv::Mat*> m_display_queue;
+    bites::ConcurrentQueue <cv::Mat*> m_done_queue;
+    bites::ConcurrentQueue <RectColor> m_rect_colors;
 };
 
 }  // namespace sherlock.

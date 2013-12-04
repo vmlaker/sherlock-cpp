@@ -1,13 +1,17 @@
 // Difference from running average.
 
+// Include standard headers.
 #include <vector>
 #include <string>
 #include <sstream>
+
+// Include 3rd party headers.
 #include <boost/date_time.hpp>
 #include <boost/filesystem.hpp>
 #include <opencv2/opencv.hpp>
-#include "RateTicker.hpp"
-#include "Config.hpp"
+#include <bites.hpp>
+
+// Include application headers.
 #include "util.hpp"
 
 
@@ -32,7 +36,7 @@ int main(int argc, char** argv)
     // Initialize the classifiers and their respective colors.
     std::vector <cv::CascadeClassifier*> classifiers;
     std::vector <cv::Scalar> colors;
-    Config config ("conf/classifiers.conf");
+    bites::Config config ("conf/classifiers.conf");
     for(auto fname : config.keys())
     {
         if(fname == "DIRS"){
@@ -57,7 +61,7 @@ int main(int argc, char** argv)
     }
 
     // Monitor framerates for the given seconds past.
-    RateTicker framerate ({ 1, 5, 10 });
+    bites::RateTicker framerate ({ 1, 5, 10 });
 
     // Run the loop for designated amount of time.
     auto now = boost::posix_time::microsec_clock::universal_time();

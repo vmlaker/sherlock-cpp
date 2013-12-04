@@ -1,6 +1,6 @@
 // Include 3rd party headers.
 #include <boost/date_time.hpp>
-#include "RateTicker.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Captor.hpp"
@@ -16,7 +16,7 @@ void Captor::run ()
     cap.set(4, m_height);
 
     // Monitor framerates for the given seconds past.
-    RateTicker framerate ({ 1, 5, 10 });
+    bites::RateTicker framerate ({ 1, 5, 10 });
 
     // Run the loop for designated amount of time.
     auto now = boost::posix_time::microsec_clock::universal_time();

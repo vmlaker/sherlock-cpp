@@ -6,7 +6,7 @@
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
-#include "ConcurrentQueue.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Worker.hpp"
@@ -18,9 +18,9 @@ class Displayer : public Worker {
 
 public:
     Displayer(
-        ConcurrentQueue <cv::Mat*>& display_queue,
-        ConcurrentQueue <cv::Mat*>& done_queue,
-        ConcurrentQueue <RectColor>& rect_colors
+        bites::ConcurrentQueue <cv::Mat*>& display_queue,
+        bites::ConcurrentQueue <cv::Mat*>& done_queue,
+        bites::ConcurrentQueue <RectColor>& rect_colors
         ):
         m_display_queue (display_queue),
         m_done_queue (done_queue),
@@ -28,9 +28,9 @@ public:
         { /* Empty. */ }
 
 private:
-    ConcurrentQueue <cv::Mat*>& m_display_queue;
-    ConcurrentQueue <cv::Mat*>& m_done_queue;
-    ConcurrentQueue <RectColor>& m_rect_colors;
+    bites::ConcurrentQueue <cv::Mat*>& m_display_queue;
+    bites::ConcurrentQueue <cv::Mat*>& m_done_queue;
+    bites::ConcurrentQueue <RectColor>& m_rect_colors;
     void run();
 };
 

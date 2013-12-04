@@ -4,7 +4,7 @@
 
 // Include 3rd party headers.
 #include <boost/filesystem.hpp>
-#include "Config.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Detector.hpp"
@@ -26,7 +26,7 @@ Detector::Detector(
     m_deallocator(m_done_queue)
 {
     // Load the configuration file.
-    Config config ("conf/classifiers.conf");
+    bites::Config config ("conf/classifiers.conf");
 
     // Iterate the configuration entries.
     for(auto fname : config.keys())
@@ -63,7 +63,7 @@ Detector::Detector(
             cv::Scalar color(rr, gg, bb);
 
             // Create the input queue.
-            auto input_queue = new ConcurrentQueue<cv::Mat*>;
+            auto input_queue = new bites::ConcurrentQueue<cv::Mat*>;
             m_classifier_inputs.push_back(input_queue);
 
             // Create the classifier worker.

@@ -7,7 +7,7 @@
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
-#include "ConcurrentQueue.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Worker.hpp"
@@ -22,8 +22,8 @@ public:
         const int& width,
         const int& height,
         const int& duration,
-        std::vector< ConcurrentQueue <cv::Mat*>* >& classifier_queues,
-        ConcurrentQueue <cv::Mat*>& display_queue
+        std::vector< bites::ConcurrentQueue <cv::Mat*>* >& classifier_queues,
+        bites::ConcurrentQueue <cv::Mat*>& display_queue
         ):
         m_device        (device),
         m_width         (width),
@@ -38,8 +38,8 @@ private:
     int m_width;
     int m_height;
     int m_duration;
-    std::vector< ConcurrentQueue <cv::Mat*>* >& m_classifier_queues;
-    ConcurrentQueue <cv::Mat*>& m_display_queue;
+    std::vector< bites::ConcurrentQueue <cv::Mat*>* >& m_classifier_queues;
+    bites::ConcurrentQueue <cv::Mat*>& m_display_queue;
     void run();
 };
 

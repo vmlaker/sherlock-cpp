@@ -6,7 +6,7 @@
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
-#include "ConcurrentQueue.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Worker.hpp"
@@ -20,15 +20,15 @@ public:
     Classifier(
         const std::string& fname,
         const cv::Scalar& color,
-        ConcurrentQueue <cv::Mat*>& input_queue,
-        ConcurrentQueue <sherlock::RectColor>& output_queue,
-        ConcurrentQueue <cv::Mat*>& done_queue
+        bites::ConcurrentQueue <cv::Mat*>& input_queue,
+        bites::ConcurrentQueue <sherlock::RectColor>& output_queue,
+        bites::ConcurrentQueue <cv::Mat*>& done_queue
         );
 private:
     const cv::Scalar m_color;
-    ConcurrentQueue <cv::Mat*>& m_input_queue;
-    ConcurrentQueue <sherlock::RectColor>& m_output_queue;
-    ConcurrentQueue <cv::Mat*>& m_done_queue;
+    bites::ConcurrentQueue <cv::Mat*>& m_input_queue;
+    bites::ConcurrentQueue <sherlock::RectColor>& m_output_queue;
+    bites::ConcurrentQueue <cv::Mat*>& m_done_queue;
     cv::CascadeClassifier m_cv_classifier;
     void run();
 };

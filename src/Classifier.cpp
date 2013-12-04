@@ -7,9 +7,9 @@ namespace sherlock {
 Classifier::Classifier(
     const std::string& fname,
     const cv::Scalar& color,
-    ConcurrentQueue <cv::Mat*>& input_queue,
-    ConcurrentQueue <sherlock::RectColor>& output_queue,
-    ConcurrentQueue <cv::Mat*>& done_queue
+    bites::ConcurrentQueue <cv::Mat*>& input_queue,
+    bites::ConcurrentQueue <sherlock::RectColor>& output_queue,
+    bites::ConcurrentQueue <cv::Mat*>& done_queue
     ):
     m_color(color),
     m_input_queue(input_queue),

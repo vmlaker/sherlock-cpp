@@ -1,10 +1,15 @@
 // Live playback with OpenCV.
 
+// Include standard headers.
 #include <vector>
 #include <sstream>
+
+// Include 3rd party headers.
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
-#include "RateTicker.hpp"
+#include <bites.hpp>
+
+// Include application headers.
 #include "util.hpp"
 
 int main(int argc, char** argv)
@@ -18,7 +23,7 @@ int main(int argc, char** argv)
 
     // Monitor framerates for the given seconds past.
     std::vector<float> periods = { 1.0, 5, 10 };
-    RateTicker framerate (periods);
+    bites::RateTicker framerate (periods);
 
     // Create the OpenCV video capture object.
     cv::VideoCapture cap(DEVICE);

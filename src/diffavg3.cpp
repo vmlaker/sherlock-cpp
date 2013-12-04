@@ -8,8 +8,7 @@
 // Include 3rd party headers.
 #include <boost/date_time.hpp>
 #include <opencv2/opencv.hpp>
-#include "RateTicker.hpp"
-#include "ConcurrentQueue.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "util.hpp"
@@ -20,8 +19,8 @@
 void capture(
     cv::VideoCapture* cap,
     const int& duration, 
-    ConcurrentQueue <cv::Mat*>* captures,
-    ConcurrentQueue <float>* alphas
+    bites::ConcurrentQueue <cv::Mat*>* captures,
+    bites::ConcurrentQueue <float>* alphas
     )
 {
     // Keep track of previous iteration's timestamp.
@@ -54,14 +53,14 @@ void capture(
 // taking into account previously computed alpha values,
 // and push resulting diff frames onto the queue.
 void diff_average(
-    ConcurrentQueue <cv::Mat*>* captures,
-    ConcurrentQueue <cv::Mat*>* diffs,
-    ConcurrentQueue <float>* alphas
+    bites::ConcurrentQueue <cv::Mat*>* captures,
+    bites::ConcurrentQueue <cv::Mat*>* diffs,
+    bites::ConcurrentQueue <float>* alphas
     )
 {
     // Monitor framerates for the given seconds past.
     std::vector<float> periods = { 1, 5, 10 };
-    RateTicker framerate (periods);
+    bites::RateTicker framerate (periods);
 
     // Maintain accumulation of differences.
     cv::Mat image_acc;
@@ -128,7 +127,7 @@ void diff_average(
 
 // Display queued frames.
 void display(
-    ConcurrentQueue <cv::Mat*>* diffs
+    bites::ConcurrentQueue <cv::Mat*>* diffs
     )
 {
     // Create the output window.
@@ -137,7 +136,7 @@ void display(
 
     // Monitor framerates for the given seconds past.
     std::vector<float> periods = { 1, 5, 10 };
-    RateTicker framerate (periods);
+    bites::RateTicker framerate (periods);
 
     // Pull from the queue while there are valid matrices.
     cv::Mat* frame;
@@ -202,9 +201,9 @@ int main(int argc, char** argv)
     cap.set(4, HEIGHT);
 
     // Create the shared queues.
-    ConcurrentQueue <cv::Mat*> captures;
-    ConcurrentQueue <float> alphas;
-    ConcurrentQueue <cv::Mat*> diffs;
+    bites::ConcurrentQueue <cv::Mat*> captures;
+    bites::ConcurrentQueue <float> alphas;
+    bites::ConcurrentQueue <cv::Mat*> diffs;
 
     // Start up the threads.
     std::thread capturer (capture, &cap, DURATION, &captures, &alphas);

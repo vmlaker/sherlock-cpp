@@ -1,5 +1,5 @@
 // Include 3rd party headers.
-#include "RateTicker.hpp"
+#include <bites.hpp>
 
 // Include application headers.
 #include "Displayer.hpp"
@@ -15,7 +15,7 @@ void Displayer::run ()
     cv::namedWindow(title, CV_WINDOW_NORMAL);
 
     // Monitor framerates for the given seconds past.
-    RateTicker framerate ({ 1, 5, 10 });
+    bites::RateTicker framerate ({ 1, 5, 10 });
 
     // Pull from the queue while there are valid matrices.
     cv::Mat* frame;
