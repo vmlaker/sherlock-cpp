@@ -3,7 +3,6 @@
 // Include standard headers.
 #include <vector>
 #include <sstream>
-#include <thread>
 
 // Include 3rd party headers.
 #include <boost/date_time.hpp>

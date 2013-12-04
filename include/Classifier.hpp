@@ -9,13 +9,15 @@
 #include <bites.hpp>
 
 // Include application headers.
-#include "Worker.hpp"
 #include "Sherlock.hpp"
 
 namespace sherlock {
 
-class Classifier : public Worker {
-
+/*!
+  Haar cascade classifier thread.
+*/
+class Classifier : public bites::Thread
+{
 public:
     Classifier(
         const std::string& fname,

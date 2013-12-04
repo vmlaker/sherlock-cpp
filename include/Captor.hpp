@@ -9,13 +9,13 @@
 #include <opencv2/opencv.hpp>
 #include <bites.hpp>
 
-// Include application headers.
-#include "Worker.hpp"
-
 namespace sherlock {
 
-class Captor : public Worker {
-
+/*!
+  Video capture thread.
+*/
+class Captor : public bites::Thread 
+{
 public:
     Captor(
         const int& device, 
@@ -31,8 +31,7 @@ public:
         m_duration      (duration),
         m_classifier_queues (classifier_queues),
         m_display_queue (display_queue)
-        { /* Empty. */ }
-
+        {/* Empty. */}
 private:
     int m_device;
     int m_width;

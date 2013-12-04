@@ -5,18 +5,17 @@
 #include <opencv2/opencv.hpp>
 #include <bites.hpp>
 
-// Include application headers.
-#include "Worker.hpp"
-
 namespace sherlock {
 
-class Deallocator : public Worker {
-
+/*!
+  Memory deallocation thread.
+*/  
+class Deallocator : public bites::Thread 
+{
 public:
     Deallocator( bites::ConcurrentQueue <cv::Mat*>& done_queue ) 
-        : m_done_queue(done_queue) { /* Empty. */ }
+        : m_done_queue(done_queue) {/* Empty. */}
     void setTrigger(const int& value) { m_trigger = value; }
-
 private:
     bites::ConcurrentQueue <cv::Mat*>& m_done_queue;
     int m_trigger = -1;
