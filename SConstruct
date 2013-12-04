@@ -28,7 +28,8 @@ env = Environment(
     CXXFLAGS='-std=c++11',
 )
 if debug: env.Append(CXXFLAGS = ' -g')
-env.Library('lib/sherlock', source=sources)
+lib = env.Library('lib/sherlock', source=sources)
+Default(lib)  # Library is built by default.
 
 # Build the programs.
 sources = (
@@ -64,4 +65,5 @@ for source in sources:
     target = source[:source.rfind('.')]
     target = os.path.basename(target)
     target = os.path.join('bin', target)
-    env.Program(target, source)
+    prog = env.Program(target, source)
+    Default(prog)  # Program is built by default.
