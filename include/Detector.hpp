@@ -14,7 +14,6 @@
 #include "Classifier.hpp"
 #include "Deallocator.hpp"
 #include "Displayer.hpp"
-#include "Sherlock.hpp"
 
 namespace sherlock {
 
@@ -46,7 +45,7 @@ private:
     std::vector< bites::ConcurrentQueue <cv::Mat*>* > m_classifier_inputs;
     bites::ConcurrentQueue <cv::Mat*> m_display_queue;
     bites::ConcurrentQueue <cv::Mat*> m_done_queue;
-    bites::ConcurrentQueue <RectColor> m_rect_colors;
+    bites::ConcurrentQueue <Classifier::RectColor> m_rect_colors;
 };
 
 }  // namespace sherlock.

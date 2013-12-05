@@ -6,7 +6,7 @@
 #include <bites.hpp>
 
 // Include application headers.
-#include "Sherlock.hpp"
+#include "Classifier.hpp"
 
 namespace sherlock {
 
@@ -19,7 +19,7 @@ public:
     Displayer(
         bites::ConcurrentQueue <cv::Mat*>& display_queue,
         bites::ConcurrentQueue <cv::Mat*>& done_queue,
-        bites::ConcurrentQueue <RectColor>& rect_colors
+        bites::ConcurrentQueue <Classifier::RectColor>& rect_colors
         ):
         m_display_queue (display_queue),
         m_done_queue (done_queue),
@@ -28,7 +28,7 @@ public:
 private:
     bites::ConcurrentQueue <cv::Mat*>& m_display_queue;
     bites::ConcurrentQueue <cv::Mat*>& m_done_queue;
-    bites::ConcurrentQueue <RectColor>& m_rect_colors;
+    bites::ConcurrentQueue <Classifier::RectColor>& m_rect_colors;
     void run();
 };
 

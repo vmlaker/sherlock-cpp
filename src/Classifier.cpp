@@ -4,23 +4,6 @@
 
 namespace sherlock {
 
-Classifier::Classifier(
-    const std::string& fname,
-    const cv::Scalar& color,
-    bites::ConcurrentQueue <cv::Mat*>& input_queue,
-    bites::ConcurrentQueue <sherlock::RectColor>& output_queue,
-    bites::ConcurrentQueue <cv::Mat*>& done_queue
-    ):
-    m_color(color),
-    m_input_queue(input_queue),
-    m_output_queue(output_queue),
-    m_cv_classifier(fname),
-    m_done_queue(done_queue)
-{
-    /* Empty. */ 
-}
-
-
 void Classifier::run ()
 {
     // Pull from the queue while there are valid matrices.
@@ -28,7 +11,6 @@ void Classifier::run ()
     m_input_queue.wait_and_pop(frame);
     while(frame)
     {
-
         std::vector<cv::Rect> rects;
         m_cv_classifier.detectMultiScale(
             *frame,

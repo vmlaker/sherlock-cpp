@@ -23,7 +23,7 @@ void Displayer::run ()
     while(frame)
     {
         // Draw the rectangles.
-        RectColor rect_color;
+        Classifier::RectColor rect_color;
         while(m_rect_colors.try_pop(rect_color))
         {
             auto rect = rect_color.rect;
