@@ -67,3 +67,10 @@ for source in sources:
     target = os.path.join('bin', target)
     prog = env.Program(target, source)
     Default(prog)  # Program is built by default.
+
+# Custom builder for running Doxygen.
+doxy = Builder(
+    action='doxygen $SOURCE',
+)
+env = Environment(BUILDERS={'Doxygen' : doxy})
+env.Doxygen(target='doxygen', source='doxy.conf')
