@@ -15,7 +15,7 @@ void Displayer::run ()
     cv::namedWindow(title, CV_WINDOW_NORMAL);
 
     // Monitor framerates for the given seconds past.
-    bites::RateTicker framerate ({ 1, 5, 10 });
+    bites::RateTicker ticker ({ 1, 5, 10 });
 
     // Pull from the queue while there are valid matrices.
     cv::Mat* frame;
@@ -37,12 +37,16 @@ void Displayer::run ()
                 );
         }
 
-        // Write the display framerate on top of the image.
-        auto fps = framerate.tick();
-        std::ostringstream line;
-        line << std::fixed << std::setprecision(2);
-        line << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS display)";
-        std::list<std::string> lines ({ "", "", line.str() });
+        // Write the on-screen-display information.
+        std::ostringstream line1, line2, line3;
+        line1 << frame->cols << "x" << frame->rows;
+        line2 << std::fixed << std::setprecision(2);
+        auto fps = m_capture_framerate.get();
+        line2 << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS capture)";
+        fps = ticker.tick();
+        line3 << std::fixed << std::setprecision(2);
+        line3 << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS display)";
+        std::list<std::string> lines ({ line1.str(), line2.str(), line3.str() });
         sherlock::writeOSD(*frame, lines, 0.04);
 
         // Display the snapshot.

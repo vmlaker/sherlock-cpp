@@ -16,7 +16,7 @@ void Captor::run ()
     cap.set(4, m_height);
 
     // Monitor framerates for the given seconds past.
-    bites::RateTicker framerate ({ 1, 5, 10 });
+    bites::RateTicker ticker ({ 1, 5, 10 });
 
     // Run the loop for designated amount of time.
     auto now = boost::posix_time::microsec_clock::universal_time();
@@ -28,14 +28,8 @@ void Captor::run ()
         auto frame = new cv::Mat;
         cap >> *frame; 
 
-        // Stamp the capture framerate on top of the image.
-        auto fps = framerate.tick();
-        std::ostringstream line1, line2;
-        line1 << m_width << "x" << m_height;
-        line2 << std::fixed << std::setprecision(2);
-        line2 << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS capture)";
-        std::list<std::string> lines ({ line1.str(), line2.str() });
-        sherlock::writeOSD(*frame, lines, 0.04);
+        // Set the framerate.
+        m_framerate.set(ticker.tick());
 
         // Push image onto all queues.
         for(auto cqueue : m_classifier_queues)

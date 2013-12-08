@@ -1,6 +1,6 @@
-/*!
-  The Detector class encapsulates object detector functionality.
- */
+/**
+   The Detector class encapsulates object detector functionality.
+*/
 
 // Include 3rd party headers.
 #include <boost/filesystem.hpp>
@@ -21,8 +21,13 @@ Detector::Detector(
     m_captor(
         device, width, height, duration, 
         m_classifier_inputs, 
-        m_display_queue),
-    m_displayer(m_display_queue, m_done_queue, m_rect_colors),
+        m_display_queue,
+        m_capture_framerate),
+    m_displayer(
+        m_display_queue, 
+        m_done_queue, 
+        m_rect_colors,
+        m_capture_framerate),
     m_deallocator(m_done_queue)
 {
     // Load the configuration file.

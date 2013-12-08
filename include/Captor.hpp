@@ -11,8 +11,8 @@
 
 namespace sherlock {
 
-/*!
-  Video capture thread.
+/**
+   Video capture thread.
 */
 class Captor : public bites::Thread 
 {
@@ -23,14 +23,16 @@ public:
         const int& height,
         const int& duration,
         std::vector< bites::ConcurrentQueue <cv::Mat*>* >& classifier_queues,
-        bites::ConcurrentQueue <cv::Mat*>& display_queue
+        bites::ConcurrentQueue <cv::Mat*>& display_queue,
+        bites::Mutexed <std::vector <float>>& framerate
         ):
         m_device        (device),
         m_width         (width),
         m_height        (height),
         m_duration      (duration),
         m_classifier_queues (classifier_queues),
-        m_display_queue (display_queue)
+        m_display_queue (display_queue),
+        m_framerate (framerate)
         {/* Empty. */}
 private:
     int m_device;
@@ -39,6 +41,7 @@ private:
     int m_duration;
     std::vector< bites::ConcurrentQueue <cv::Mat*>* >& m_classifier_queues;
     bites::ConcurrentQueue <cv::Mat*>& m_display_queue;
+    bites::Mutexed <std::vector <float>>& m_framerate;
     void run();
 };
 

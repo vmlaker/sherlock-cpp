@@ -3,7 +3,6 @@
 
 // Include standard headers.
 #include <vector>
-#include <thread>
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
@@ -46,6 +45,8 @@ private:
     bites::ConcurrentQueue <cv::Mat*> m_display_queue;
     bites::ConcurrentQueue <cv::Mat*> m_done_queue;
     bites::ConcurrentQueue <Classifier::RectColor> m_rect_colors;
+
+    bites::Mutexed <std::vector <float>> m_capture_framerate;
 };
 
 }  // namespace sherlock.
