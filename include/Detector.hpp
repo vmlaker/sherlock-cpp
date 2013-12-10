@@ -16,15 +16,33 @@
 
 namespace sherlock {
 
+/**
+   The top-level object detection class.
+*/
 class Detector {
 
 public:
+
+    /**
+       Initialize the object detector with configuration parameters.
+
+       @param  device        Device index.
+       @param  width         Width of video.
+       @param  height        Height of video.
+       @param  duration      Duration of detection (in seconds.)
+       @param  config_fname  Classifier configuration file.
+    */
     Detector(
         const int& device, 
         const int& width, 
         const int& height, 
-        const int& duration);
+        const int& duration,
+        const std::string& config_fname);
     ~Detector();
+
+    /**
+       Start detection.
+    */
     void run();
 
 private:

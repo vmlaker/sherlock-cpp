@@ -16,7 +16,8 @@ Detector::Detector(
     const int& device,
     const int& width,
     const int& height,
-    const int& duration
+    const int& duration,
+    const std::string& config_fname
     ) :
     m_captor(
         device, width, height, duration, 
@@ -31,7 +32,7 @@ Detector::Detector(
     m_deallocator(m_done_queue)
 {
     // Load the configuration file.
-    bites::Config config ("conf/classifiers.conf");
+    bites::Config config (config_fname);
 
     // Iterate the configuration entries.
     for(auto fname : config.keys())
@@ -81,6 +82,12 @@ Detector::Detector(
                 );
             m_classifiers.push_back(cfer);
         }
+    }
+
+    // Dump a warning in case of no classifiers.
+    if (m_classifiers.size() == 0)
+    {
+        std::cout << "Warning: Not using any classifiers." << std::endl;
     }
 }
 
