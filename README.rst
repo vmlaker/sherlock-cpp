@@ -2,8 +2,8 @@ Sherlock C++
 ============
 
 C++ version of the `Sherlock <http://github.com/vmlaker/sherlock>`_
-video processing codes using multi-threading
-to accelerate performance on SMP (multi-core or multi-processor) systems.
+video processing codes using multi-threading and shared memory
+for high performance on SMP (multi-core or multi-processor) systems.
 
 Requirements
 ------------
@@ -35,11 +35,38 @@ Download the *Sherlock C++* codes, and build them:
    cd sherlock-cpp
    scons -j8 debug=0
 
-Now, test the basic functionality. Try playing live video from
+Test basic functionality by playing live video from
 the first device (``/dev/video0``) for a duration of 10 seconds:
 ::
 
    bin/playcv 0 800 600 10
+
+Object detection
+................
+
+Objects in the video stream are detected using Haar feature-based 
+cascade classifiers. Active classifiers are listed in
+``conf/classifiers.conf`` file. By default, these are 
+vanilla classifiers shipped with OpenCV distribution.
+You can edit this file to activate (or deactivate) classifiers,
+change search paths or add your own custom classifiers.
+
+The parallel algorithm distributes tasks among multiple
+threads, a separate thread running one of the following tasks:
+
+   A) Allocation of frame memory and video capture.
+
+   B) Object detection (one thread per each Haar classifier.)
+
+   C) Augmenting output with detection result and displaying the frame.
+
+   D) Memory deallocation.
+
+Memory for every captured frame is shared between all threads.
+You can run the object detection algorithm with:
+::
+   
+   bin/detect 0 800 600 10
 
 Motion detection
 ................
@@ -75,36 +102,6 @@ prefixed with the ``time`` command.
    ::
 
       bin/diffavg3 0 800 600 10
-
-Object detection
-................
-
-We use Haar feature-based cascade classifiers to detect objects 
-in the video stream. Active classifiers are listed in
-``conf/classifiers.conf`` file -- by default, these are 
-vanilla classifiers shipped with OpenCV distribution.
-
-1. Run a sequential version of the algorithm:
-   ::
-   
-      bin/detect1 0 800 600 10
-
-2. Now try the parallel, shared memory version, with separate threads handling
-
-   A) allocation of frame memory and video capture,
-
-   B) object detection (one thread per each Haar classifier),
-
-   C) output display, and
-
-   D) memory deallocation.
-
-   Again, expect performance improvement over sequential version
-   only if running on an SMP machine.
-
-   ::
-   
-      bin/detect2 0 800 600 10
 
 Cleanup
 -------

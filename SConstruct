@@ -37,8 +37,7 @@ sources = (
     'src/diffavg1.cpp',
     'src/diffavg2.cpp',
     'src/diffavg3.cpp',
-    'src/detect1.cpp',
-    'src/detect2.cpp',
+    'src/detect.cpp',
 )
 libs = (
     'boost_filesystem',
