@@ -1,12 +1,25 @@
 // Include 3rd party headers.
-#include <boost/date_time.hpp>
 #include <bites.hpp>
 
 // Include application headers.
 #include "Captor.hpp"
-#include "util.hpp"
 
 namespace sherlock {
+
+void Captor::addOutput( bites::ConcurrentQueue <cv::Mat*>& output )
+{
+    std::lock_guard <std::mutex> locker (m_output_queues_mutex);
+    m_output_queues.push_back( &output );
+}
+
+void Captor::pushOutput( cv::Mat* frame ) 
+{
+    std::lock_guard <std::mutex> locker (m_output_queues_mutex);
+    for (auto oqueue : m_output_queues)
+    {
+        oqueue->push (frame);
+    }
+}
 
 void Captor::run ()
 {
@@ -31,20 +44,12 @@ void Captor::run ()
         // Set the framerate.
         m_framerate.set(ticker.tick());
 
-        // Push image onto all queues.
-        for(auto cqueue : m_classifier_queues)
-        {
-            cqueue->push(frame);
-        }
-        m_display_queue.push(frame);
+        // Push image onto all output queues.
+        pushOutput( frame );
     }
 
-    // Signal end-of-processing by pushing NULL onto all queues.
-    for(auto cqueue : m_classifier_queues)
-    {
-        cqueue->push(NULL);
-    }
-    m_display_queue.push(NULL);
+    // Signal end-of-processing by pushing NULL onto all output queues.
+    pushOutput( NULL );
 }
 
 }  // namespace sherlock.

@@ -19,11 +19,7 @@ Detector::Detector(
     const int& duration,
     const std::string& config_fname
     ) :
-    m_captor(
-        device, width, height, duration, 
-        m_classifier_inputs, 
-        m_display_queue,
-        m_capture_framerate),
+    m_captor(device, width, height, duration, m_capture_framerate),
     m_displayer(
         m_display_queue, 
         m_done_queue, 
@@ -31,6 +27,9 @@ Detector::Detector(
         m_capture_framerate),
     m_deallocator(m_done_queue)
 {
+    // Add display queue as video capture output.
+    m_captor.addOutput (m_display_queue);
+
     // Load the configuration file.
     bites::Config config (config_fname);
 
@@ -68,9 +67,12 @@ Detector::Detector(
             std::stringstream(config[fname]) >> rr >> gg >> bb;
             cv::Scalar color(rr, gg, bb);
 
-            // Create the input queue.
+            // Create the classifier input queue.
             auto input_queue = new bites::ConcurrentQueue<cv::Mat*>;
             m_classifier_inputs.push_back(input_queue);
+
+            // Add the classifier input queue as video capture output.
+            m_captor.addOutput(*input_queue);
 
             // Create the classifier worker.
             auto cfer = new sherlock::Classifier(
