@@ -21,6 +21,11 @@ void Captor::pushOutput( cv::Mat* frame )
     }
 }
 
+std::vector <float> Captor::getFramerate ()
+{
+    return m_framerate.get();
+}
+
 void Captor::run ()
 {
     // Create the OpenCV video capture object.

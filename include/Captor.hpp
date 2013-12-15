@@ -25,27 +25,28 @@ public:
        @param  width      Width of video.
        @param  height     Height of video.
        @param  duration   Duration of detection (in seconds.)
-       @param  framerate  Running framerate.
     */
     Captor(
         const int& device, 
         const int& width,
         const int& height,
-        const int& duration,
-        bites::Mutexed <std::vector <float>>& framerate
+        const int& duration
         ):
         m_device        (device),
         m_width         (width),
         m_height        (height),
-        m_duration      (duration),
-        m_output_queues (),
-        m_framerate (framerate)
+        m_duration      (duration)
         {/* Empty. */}
 
     /**
        Add an output queue for allocated frames.
     */
     void addOutput( bites::ConcurrentQueue <cv::Mat*>& );
+
+    /**
+       Retrieve the current capture framerate.
+    */
+    std::vector <float> getFramerate ();
 
 private:
     int m_device;
@@ -57,13 +58,18 @@ private:
     std::mutex m_output_queues_mutex;
     std::vector< bites::ConcurrentQueue <cv::Mat*>* > m_output_queues;
 
-    bites::Mutexed <std::vector <float>>& m_framerate;
-    void run();
+    // The current running framerate.
+    bites::Mutexed <std::vector <float>> m_framerate;
 
     /**
        Push a frame onto all output queues.
     */
     void pushOutput( cv::Mat* frame );
+
+    /**
+       The threaded function.
+    */
+    void run();
 };
 
 }  // namespace sherlock.

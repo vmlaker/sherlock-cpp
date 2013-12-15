@@ -8,7 +8,6 @@
 
 // Include application headers.
 #include "Detector.hpp"
-#include "util.hpp"
 
 namespace sherlock {
 
@@ -19,12 +18,12 @@ Detector::Detector(
     const int& duration,
     const std::string& config_fname
     ) :
-    m_captor(device, width, height, duration, m_capture_framerate),
+    m_captor(device, width, height, duration),
     m_displayer(
         m_display_queue, 
         m_done_queue, 
         m_rect_colors,
-        m_capture_framerate),
+        m_captor),
     m_deallocator(m_done_queue)
 {
     // Add display queue as video capture output.

@@ -1,6 +1,5 @@
 // Include application headers.
 #include "Deallocator.hpp"
-#include "util.hpp"
 
 namespace sherlock {
 
