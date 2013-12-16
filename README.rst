@@ -49,18 +49,16 @@ cascade classifiers. Active classifiers are listed in
 ``conf/classifiers.conf`` file. By default, these are 
 vanilla classifiers shipped with OpenCV distribution.
 You can edit this file to activate (or deactivate) classifiers,
-change search paths or add your own custom classifiers.
+change search paths, add your own custom classifiers,
+and configure global object detection parameters.
 
 The parallel algorithm distributes tasks among multiple
 threads, a separate thread running one of the following tasks:
 
-   A) Allocation of frame memory and video capture.
-
-   B) Object detection (one thread per each Haar classifier.)
-
-   C) Augmenting output with detection result and displaying the frame.
-
-   D) Memory deallocation.
+A) Allocation of frame memory and video capture.
+B) Object detection (one thread per each Haar classifier.)
+C) Augmenting output with detection result and displaying the frame.   
+D) Memory deallocation.
 
 Memory for every captured frame is shared between all threads.
 You can run the object detection algorithm with:

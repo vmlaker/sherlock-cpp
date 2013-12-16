@@ -12,14 +12,20 @@ void Classifier::run ()
     while(frame)
     {
         std::vector<cv::Rect> rects;
+        cv::Size min_size (
+            frame->size().width*m_min_size_ratio,
+            frame->size().height*m_min_size_ratio);
+        cv::Size max_size (
+            frame->size().width*m_max_size_ratio,
+            frame->size().height*m_max_size_ratio);
         m_cv_classifier.detectMultiScale(
             *frame,
             rects,
-            1.3,  // scale factor.
-            3,    // min neighbors.
+            m_scale_factor,
+            m_min_neighbors,
             0,    // flags.
-            {frame->size().width/20, frame->size().height/20},  // min size.
-            {frame->size().width/2, frame->size().height/2}     // max size.
+            min_size,
+            max_size
             );
 
         // Add rectangles to the data queue.

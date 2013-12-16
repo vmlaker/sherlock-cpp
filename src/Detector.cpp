@@ -77,6 +77,10 @@ Detector::Detector(
             auto cfer = new sherlock::Classifier(
                 full.string(),
                 color,
+                atof(config["SCALE_FACTOR"].c_str()),
+                atoi(config["MIN_NEIGHBORS"].c_str()),
+                atof(config["MIN_SIZE_RATIO"].c_str()),
+                atof(config["MAX_SIZE_RATIO"].c_str()),
                 *input_queue,
                 m_rect_colors,
                 m_done_queue
