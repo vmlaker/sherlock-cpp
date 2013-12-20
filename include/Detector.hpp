@@ -30,6 +30,7 @@ public:
        @param  width         Width of video.
        @param  height        Height of video.
        @param  duration      Duration of detection (in seconds.)
+       @param  max_fps       Maximum FPS capture limit.
        @param  config_fname  Classifier configuration file.
     */
     Detector(
@@ -37,6 +38,7 @@ public:
         const int& width, 
         const int& height, 
         const int& duration,
+        const float& max_fps,
         const std::string& config_fname);
     ~Detector();
 

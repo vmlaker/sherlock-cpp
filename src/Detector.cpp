@@ -16,9 +16,10 @@ Detector::Detector(
     const int& width,
     const int& height,
     const int& duration,
+    const float& max_fps,
     const std::string& config_fname
     ) :
-    m_captor(device, width, height, duration),
+    m_captor(device, width, height, duration, max_fps),
     m_displayer(
         m_display_queue, 
         m_done_queue, 

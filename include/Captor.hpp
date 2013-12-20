@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <limits>
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
@@ -25,17 +26,20 @@ public:
        @param  width      Width of video.
        @param  height     Height of video.
        @param  duration   Duration of detection (in seconds.)
+       @param  max_fps    Maximum FPS rate limit.
     */
     Captor(
         const int& device, 
         const int& width,
         const int& height,
-        const int& duration
+        const int& duration,
+        const float& max_fps = std::numeric_limits<float>::max()
         ):
         m_device        (device),
         m_width         (width),
         m_height        (height),
-        m_duration      (duration)
+        m_duration      (duration),
+        m_max_fps       (max_fps)
         {/* Empty. */}
 
     /**
@@ -53,6 +57,7 @@ private:
     int m_width;
     int m_height;
     int m_duration;
+    float m_max_fps;
 
     // The output queues and the associated access mutex.
     std::mutex m_output_queues_mutex;
