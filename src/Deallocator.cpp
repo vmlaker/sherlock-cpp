@@ -19,20 +19,19 @@ void Deallocator::run ()
     {
         // If this is the first time frame is encountered,
         // initialize it's count to 1 (one.)
+        // Otherwise, increment the frame's existing count,
         if(done_counts.find(frame) == done_counts.end())
         {
             done_counts.insert({ frame, 1 });
-        }
-        // Otherwise, increment the frame's existing count,
-        // and perform deallocation, if triggered.
-        else
-        {
+        }else{
             done_counts[frame]++;
-            if(done_counts[frame] == m_trigger)
-            {
-                delete frame;
-                done_counts.erase(frame);
-            }
+        }
+        
+        // Perform deallocation, if triggered.
+        if(done_counts[frame] == m_trigger)
+        {
+            delete frame;
+            done_counts.erase(frame);
         }
         
         // Retrieve the next frame.
