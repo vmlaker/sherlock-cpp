@@ -28,12 +28,15 @@ On systems using Aptitude package manager (Debian, Ubuntu):
 Usage
 -----
 
-Download the *Sherlock C++* codes, and build them:
+Download the *Sherlock C++* codes and
+the auxiliary `Bites <http://vmlaker.github.io/bites>`_ tools library.
+Then build the software stack:
 ::
 
-   git clone --recursive http://github.com/vmlaker/sherlock-cpp
+   git clone http://github.com/vmlaker/sherlock-cpp
+   git clone http://github.com/vmlaker/bites
    cd sherlock-cpp
-   scons -j8 debug=0
+   scons bites=../bites
 
 Test basic functionality by playing live video from
 the first device (``/dev/video0``) for a duration of 10 seconds:

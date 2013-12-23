@@ -5,10 +5,20 @@ import os
 # Retrieve the debug flag, if set.
 debug = bool(int(ARGUMENTS.get('debug', False)))
 
-# Build the Bites library.
-SConscript('bites/SConstruct')
+# Retrieve the Bites installation path.
+bites_path = ARGUMENTS.get('bites', None)
+if not bites_path:
+    print('Please specify path to Bites installation, e.g. "bites=../bites"')
+    exit(1)
 
-# Compile utils.
+# Build the Bites library (if not already done.)
+SConscript(os.path.join(bites_path, 'SConstruct'))
+
+# Assemble Bites include and library paths.
+bites_inc_path = os.path.join(bites_path, 'include')
+bites_lib_path = os.path.join(bites_path, 'lib')
+
+# Assemble environment for building the library.
 sources = (
     'src/util.cpp',
     'src/Captor.cpp',
@@ -23,15 +33,17 @@ libs = (
     'bites',
 )
 env = Environment(
-    CPPPATH=('include', 'bites/include'),
+    CPPPATH=('include', bites_inc_path),
     LIBS=libs,
     CXXFLAGS='-std=c++11',
 )
 if debug: env.Append(CXXFLAGS = ' -g')
+
+# Build the library.
 lib = env.Library('lib/sherlock', source=sources)
 Default(lib)  # Library is built by default.
 
-# Build the programs.
+# Assemble environment for building the programs.
 sources = (
     'src/playcv.cpp',
     'src/diffavg1.cpp',
@@ -54,12 +66,14 @@ libs = (
     'bites',
 )
 env = Environment(
-    CPPPATH=('bites/include', 'include'),
-    LIBPATH=('bites/lib', 'lib'),
+    CPPPATH=(bites_inc_path, 'include'),
+    LIBPATH=(bites_lib_path, 'lib'),
     LIBS=libs,
     CXXFLAGS='-std=c++11',
 ) 
 if debug: env.Append(CXXFLAGS = ' -g')
+
+# Build the programs.
 for source in sources:
     target = source[:source.rfind('.')]
     target = os.path.basename(target)
