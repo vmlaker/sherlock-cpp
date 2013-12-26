@@ -10,7 +10,7 @@
 #include <bites.hpp>
 
 // Include application headers.
-#include "util.hpp"
+#include "sherlock.hpp"
 
 
 // Capture frames for given *duration* number of seconds,

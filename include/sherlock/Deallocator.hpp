@@ -1,5 +1,5 @@
-#ifndef __DEALLOCATOR_HPP__
-#define __DEALLOCATOR_HPP__
+#ifndef SHERLOCK_DEALLOCATOR_HPP_INCLUDED
+#define SHERLOCK_DEALLOCATOR_HPP_INCLUDED
 
 // Include 3rd party headers.
 #include <opencv2/opencv.hpp>
@@ -24,4 +24,4 @@ private:
 
 }  // namespace sherlock.
 
-#endif  // __DEALLOCATOR_HPP__
+#endif  // SHERLOCK_DEALLOCATOR_HPP_INCLUDED

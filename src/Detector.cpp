@@ -2,12 +2,15 @@
    The Detector class encapsulates object detector functionality.
 */
 
+// Include standard headers.
+#include <functional>
+
 // Include 3rd party headers.
 #include <boost/filesystem.hpp>
 #include <bites.hpp>
 
 // Include application headers.
-#include "Detector.hpp"
+#include "sherlock.hpp"
 
 namespace sherlock {
 
@@ -24,7 +27,10 @@ Detector::Detector(
         m_display_queue, 
         m_done_queue, 
         m_rect_colors,
-        m_captor),
+
+        //m_captor),
+        std::bind(&sherlock::Captor::getFramerate, &m_captor)),
+
     m_deallocator(m_done_queue)
 {
     // Add display queue as video capture output.

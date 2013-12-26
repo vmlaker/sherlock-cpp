@@ -1,3 +1,6 @@
+#ifndef SHERLOCK_UTIL_HPP_INCLUDED
+#define SHERLOCK_UTIL_HPP_INCLUDED
+
 /**
   Utility functions.
 */
@@ -43,3 +46,5 @@ void writeOSD(
     const double& size);
 
 } // namespace sherlock.
+
+#endif  // SHERLOCK_UTIL_HPP_INCLUDED

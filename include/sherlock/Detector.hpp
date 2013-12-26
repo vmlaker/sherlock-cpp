@@ -1,5 +1,5 @@
-#ifndef __DETECTOR_HPP__
-#define __DETECTOR_HPP__
+#ifndef SHERLOCK_DETECTOR_HPP_INCLUDED
+#define SHERLOCK_DETECTOR_HPP_INCLUDED
 
 // Include standard headers.
 #include <vector>
@@ -69,4 +69,4 @@ private:
 
 }  // namespace sherlock.
 
-#endif  //__DETECTOR_HPP__
+#endif  // SHERLOCK_DETECTOR_HPP_INCLUDED

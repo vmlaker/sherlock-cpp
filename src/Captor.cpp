@@ -2,7 +2,7 @@
 #include <bites.hpp>
 
 // Include application headers.
-#include "Captor.hpp"
+#include "sherlock.hpp"
 
 namespace sherlock {
 

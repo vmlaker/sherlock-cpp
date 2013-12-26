@@ -1,5 +1,5 @@
-#ifndef __CAPTOR_HPP__
-#define __CAPTOR_HPP__
+#ifndef SHERLOCK_CAPTOR_HPP_INCLUDED
+#define SHERLOCK_CAPTOR_HPP_INCLUDED
 
 // Include standard headers.
 #include <vector>
@@ -79,4 +79,4 @@ private:
 
 }  // namespace sherlock.
 
-#endif  // __CAPTOR_HPP__
+#endif  // SHERLOCK_CAPTOR_HPP_INCLUDED

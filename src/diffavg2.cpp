@@ -10,7 +10,7 @@
 #include <bites.hpp>
 
 // Import application headers.
-#include "util.hpp"
+#include "sherlock.hpp"
 
 void step1(
     cv::VideoCapture* cap,

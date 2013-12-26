@@ -1,6 +1,5 @@
 // Include application headers.
-#include "Classifier.hpp"
-#include "util.hpp"
+#include "sherlock.hpp"
 
 namespace sherlock {
 

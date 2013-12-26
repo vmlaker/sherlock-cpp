@@ -1,5 +1,5 @@
-#ifndef __CLASSIFIER_HPP__
-#define __CLASSIFIER_HPP__
+#ifndef SHERLOCK_CLASSIFIER_HPP_INCLUDED
+#define SHERLOCK_CLASSIFIER_HPP_INCLUDED
 
 // Include standard headers.
 #include <string>
@@ -75,4 +75,4 @@ private:
 
 }  // namespace sherlock.
 
-#endif  // __CLASSIFIER_HPP__
+#endif  // SHERLOCK_CLASSIFIER_HPP_INCLUDED

@@ -7,7 +7,7 @@
 #include <sstream>
 
 // Include application headers.
-#include "Detector.hpp"
+#include "sherlock.hpp"
 
 int main(int argc, char** argv)
 {

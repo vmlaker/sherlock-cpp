@@ -2,8 +2,7 @@
 #include <bites.hpp>
 
 // Include application headers.
-#include "Displayer.hpp"
-#include "util.hpp"
+#include "sherlock.hpp"
 
 namespace sherlock {
 
@@ -41,7 +40,7 @@ void Displayer::run ()
         std::ostringstream line1, line2, line3;
         line1 << frame->cols << "x" << frame->rows;
         line2 << std::fixed << std::setprecision(2);
-        auto fps = m_captor.getFramerate();
+        auto fps = m_get_capture_fps();
         line2 << fps[0] << ", " << fps[1] << ", " << fps[2] << " (FPS capture)";
         fps = ticker.tick();
         line3 << std::fixed << std::setprecision(2);
