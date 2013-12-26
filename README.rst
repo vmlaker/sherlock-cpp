@@ -29,18 +29,12 @@ Usage
 -----
 
 Download the *Sherlock C++* codes and
-the auxiliary `Bites <http://vmlaker.github.io/bites>`_ tools library:
+the auxiliary `Bites <http://vmlaker.github.io/bites>`_ tools library,
+then build the software stack:
 ::
 
    git clone http://github.com/vmlaker/sherlock-cpp
    git clone http://github.com/vmlaker/bites
-
-
-Then build the software stack:
-::
-
-   cd bites
-   scons -j8
    cd sherlock-cpp
    scons bites=../bites
 
