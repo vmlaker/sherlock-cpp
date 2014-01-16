@@ -52,18 +52,21 @@ sources = (
     'src/detect.cpp',
 )
 libs = (
-    'boost_filesystem',
-    'boost_thread',
-    'boost_system',
+    # Order is important: sherlock (1st) depends on bites (2nd).
+    'sherlock',
+    'bites',
+
+    # OpenCV.
+    'opencv_objdetect',
     'opencv_core',
 #    'opencv_contrib',
     'opencv_highgui',
     'opencv_imgproc',
-    'opencv_objdetect',
-    
-    # Order is important: sherlock (1st) depends on coils (2nd).
-    'sherlock',
-    'bites',
+
+    # Boost.
+    'boost_filesystem',
+    'boost_thread',
+    'boost_system',
 )
 env = Environment(
     CPPPATH=(bites_inc_path, 'include'),
