@@ -63,6 +63,8 @@ B) Object detection (one thread per each Haar classifier.)
 C) Augmenting output with detection result and displaying the frame.   
 D) Memory deallocation.
 
+.. image:: https://raw.github.com/vmlaker/sherlock-cpp/master/diagram.png
+
 Memory for every captured frame is shared between all threads.
 You can run the object detection algorithm with:
 ::
