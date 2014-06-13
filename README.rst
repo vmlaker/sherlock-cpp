@@ -33,8 +33,8 @@ the auxiliary `Bites <http://vmlaker.github.io/bites>`_ tools library,
 then build the software stack:
 ::
 
-   git clone http://github.com/vmlaker/sherlock-cpp
-   git clone http://github.com/vmlaker/bites
+   git clone https://github.com/vmlaker/sherlock-cpp
+   git clone https://github.com/vmlaker/bites
    cd sherlock-cpp
    scons bites=../bites
 
